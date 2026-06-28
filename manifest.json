@@ -1,0 +1,10 @@
+{
+  "domain": "smartthings_ir",
+  "name": "SmartThings IR",
+  "version": "1.0.0",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@101Sean"],
+  "config_flow": true,
+  "iot_class": "cloud_polling"
+}
