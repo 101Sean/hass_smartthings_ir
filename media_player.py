@@ -5,6 +5,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN, CONF_DEVICE_ID, CONF_NAME
+from .api import SmartThingsIRAPI
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,15 +21,13 @@ async def async_setup_entry(
 
 class SmartThingsIRMediaPlayer(MediaPlayerEntity):
     _attr_supported_features = (
-        MediaPlayerEntityFeature.TURN_ON |
         MediaPlayerEntityFeature.TURN_OFF |
         MediaPlayerEntityFeature.VOLUME_STEP |
         MediaPlayerEntityFeature.VOLUME_MUTE |
         MediaPlayerEntityFeature.NEXT_TRACK |
-        MediaPlayerEntityFeature.PREVIOUS_TRACK |
-        MediaPlayerEntityFeature.PLAY |
-        MediaPlayerEntityFeature.PAUSE
+        MediaPlayerEntityFeature.PREVIOUS_TRACK
     )
+    _attr_assumed_state = True
 
     def __init__(self, hass, device_id, name, device_type):
         self.hass = hass
@@ -36,16 +35,18 @@ class SmartThingsIRMediaPlayer(MediaPlayerEntity):
         self._attr_name = name
         self._attr_device_class = "tv"
         self._attr_unique_id = f"smartthings_ir_media_player_{device_id}"
-        self._attr_state = MediaPlayerState.PLAYING
+        self._attr_state = MediaPlayerState.ON
         self._device_type = device_type
+        self._api = SmartThingsIRAPI(hass)
 
     async def async_turn_on(self):
         await self._send_command("STATELESS_POWER_TOGGLE_BUTTON", "SET_BUTTON", ["powerToggle"])
-        self._attr_state = MediaPlayerState.PLAYING
+        self._attr_state = MediaPlayerState.ON
         self.async_write_ha_state()
 
     async def async_turn_off(self):
         await self._send_command("STATELESS_POWER_TOGGLE_BUTTON", "SET_BUTTON", ["powerToggle"])
+        self._attr_state = MediaPlayerState.ON
         self.async_write_ha_state()
 
     async def async_volume_up(self):
@@ -70,15 +71,9 @@ class SmartThingsIRMediaPlayer(MediaPlayerEntity):
         pass
 
     async def _send_command(self, capability, command, arguments=None):
-        await self.hass.services.async_call(
-            "smartthing_extra",
-            "send_command",
-            {
-                "device_id": self._device_id,
-                "capability": capability,
-                "command": command,
-                "arguments": arguments or [],
-                "component": "main",
-            },
-            blocking=True,
+        await self._api.command(
+            ha_device_id=self._device_id,
+            capability=capability,
+            command=command,
+            arguments=arguments or [],
         )

@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN, CONF_DEVICE_ID, CONF_NAME
+from .api import SmartThingsIRAPI
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,12 +36,13 @@ class SmartThingsIRClimate(ClimateEntity):
         self._attr_target_temperature = 24
         self._attr_hvac_mode = HVACMode.OFF
         self._attr_fan_mode = "medium"
+        self._api = SmartThingsIRAPI(hass)
 
     async def async_set_hvac_mode(self, hvac_mode: str) -> None:
         if hvac_mode == HVACMode.OFF:
-            await self._send_command("SWITCH", "OFF")
+            await self._send_command("switch", "off")
         else:
-            await self._send_command("SWITCH", "ON")
+            await self._send_command("switch", "on")
             mode_map = {
                 HVACMode.COOL: "cool",
                 HVACMode.DRY: "dry",
@@ -63,15 +65,9 @@ class SmartThingsIRClimate(ClimateEntity):
         self.async_write_ha_state()
 
     async def _send_command(self, capability, command, arguments=None):
-        await self.hass.services.async_call(
-            "smartthing_extra",
-            "send_command",
-            {
-                "device_id": self._device_id,
-                "capability": capability,
-                "command": command,
-                "arguments": arguments or [],
-                "component": "main",
-            },
-            blocking=True,
+        await self._api.command(
+            ha_device_id=self._device_id,
+            capability=capability,
+            command=command,
+            arguments=arguments or [],
         )
