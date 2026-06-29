@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SmartThings IR 기기 추가",
+        "description": "SmartThings에 등록된 IR 기기를 선택하세요.",
+        "data": {
+          "name": "이름",
+          "device_id": "기기",
+          "device_type": "유형"
+        }
+      }
+    },
+    "abort": {
+      "no_smartthings_integration": "SmartThings 공식 통합이 없거나 로드되지 않았습니다. 먼저 SmartThings를 설정하세요.",
+      "no_ir_devices": "IR 기능이 있는 기기를 찾을 수 없습니다.",
+      "cannot_connect": "SmartThings API에 연결할 수 없습니다.",
+      "already_configured": "이 기기는 이미 추가되었습니다."
+    }
+  }
+}
