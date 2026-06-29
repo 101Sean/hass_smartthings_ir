@@ -1,5 +1,5 @@
 {
-  "domain": "smartthings_ir",
+  "domain": "hass_smartthings_ir",
   "name": "SmartThings IR Controller",
   "version": "1.1.0",
   "requirements": ["aiohttp>=3.8.0", "pysmartthings>=0.8.2"],
