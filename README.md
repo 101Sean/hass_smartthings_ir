@@ -34,7 +34,7 @@
 4. 설치 후 Home Assistant 재시작
 
 **수동 설치**
-1. [릴리즈](https://github.com/101Sean/smartthings-ir/releases) 다운로드
+1. [릴리즈](https://github.com/101Sean/hass_smartthings-ir/releases) 다운로드
 2. `/config/custom_components/`에 `smartthings_ir` 폴더 복사
 3. Home Assistant 재시작
 
@@ -49,7 +49,7 @@
 | 필드 | 설명 | 예시 |
 |------|------|------|
 | 이름 | 기기 이름 | "거실 에어컨" |
-| 기기 ID | SmartThings UUID | `6e2fae23-1b49-474b-8d8d-9d4a16c6c474` |
+| 기기 ID | SmartThings UUID | `12345678-1234-1234-1234-123456789abc` |
 | 유형 | `ac` / `tv` / `settop` | `ac` |
 
 ### SmartThings UUID 확인 방법
