@@ -1,0 +1,12 @@
+show_device_id:
+  name: Show Device UUID
+  description: Display the SmartThings UUID for a selected device
+  fields:
+    device_id:
+      name: Device
+      description: Select a SmartThings device
+      required: true
+      selector:
+        device:
+          filter:
+            - integration: smartthings
