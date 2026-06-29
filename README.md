@@ -77,7 +77,3 @@ features:
   - type: media-player-next-track    # 채널 업
   - type: media-player-previous-track # 채널 다운
 ```
-
----
-
-**Made with ❤️ by 101Sean**
